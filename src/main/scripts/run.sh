@@ -6,7 +6,7 @@ set -u # don't allow undefined variables.
 #
 # Make a long string to consume lots of memory.
 #
-# $1-value  Final string-length (100*($1))
+# $1-value  Final string-length (100*($1^2))
 # --------  -------------------
 # 1         200
 # 5         3200
