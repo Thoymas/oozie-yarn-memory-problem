@@ -6,7 +6,7 @@ A project for reproducing a memory problem when using an oozie shell action.
 The problem is the following:
 
 We have a shell action in an oozie workflow that needs a different amount of memory than
-what it is allowed to use by Yarn by default. In our test environment, this seems to be 4Gb. For this particular shell action we
+what Yarn allows map tasks by default. In our test environment, this seems to be 4Gb. For this particular shell action we
 need more memory, so we try to use the "mapreduce.map.memory.mb" configuration option to specify this. However, this seems to have
 no effect. The job always seems to fail with an error message saying something like this
 
