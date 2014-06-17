@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow-app xmlns="uri:oozie:workflow:0.4" name="${jobName}">
+
+    <parameters>
+        <property>
+            <name>jobTracker</name>
+        </property>
+
+        <property>
+            <name>nameNode</name>
+        </property>
+
+        <property>
+            <name>jobName</name>
+            <value>oozie-yarn-memory-problem</value>
+        </property>
+
+        <property>
+            <name>authentication</name>
+            <value>kerberos</value>
+        </property>
+
+        <property>
+            <name>memUseFactor</name>
+        </property>
+    </parameters>
+
+    <start to="run-shell-script" />
+
+    <action name="run-shell-script">
+        <shell xmlns="uri:oozie:shell-action:0.1">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <configuration>
+                <property>
+                    <name>mapreduce.map.memory.mb</name>
+                    <value>2048</value>
+                </property>
+            </configuration>
+            <exec>run.sh</exec>
+            <argument>${memUseFactor}</argument>
+            <file>${wf:conf("oozie.wf.application.path")}/run.sh</file>
+        </shell>
+        <ok to="end"/>
+        <error to="kill"/>
+    </action>
+
+    <kill name="kill">
+        <message>Oozie job "${jobName}" (jobtracker [${jobTracker}], namenode [${nameNode}]) failed at (wf:lastErrorNode()) with error message ${wf:errorMessage(wf:lastErrorNode())}</message>
+    </kill>
+
+    <end name="end" />
+</workflow-app>
